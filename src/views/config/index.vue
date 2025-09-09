@@ -6,6 +6,8 @@ import {R} from "../../utils/R";
 import {U} from "../../utils/util";
 import NamespaceSegmented from "../namespace/namespace-segmented.vue";
 import {useRouter} from "vue-router";
+import {ElMessageBox} from "element-plus";
+
 const router = useRouter()
 
 const namespace = ref<string>('public')
@@ -13,7 +15,9 @@ const configs = ref([])
 const page = ref({
   page_num: 1,
   page_size: 10,
+  total: 0
 })
+const filterText = ref(null)
 onMounted(() => {
   loadConfigs()
 })
@@ -21,6 +25,7 @@ const loadConfigs = () => {
   R.get('/api/config/list', {
     ...page.value,
     namespace_id: namespace.value,
+    filter_text: filterText.value
   }).then(res => {
     configs.value = res.data.list
     page.value.total = res.data.total
@@ -36,6 +41,27 @@ const toAddConfig = () => {
     query: {
       namespace_id: namespace.value,
     },
+  })
+}
+const toUpdateConfig = (row: any) => {
+  router.push({
+    name: 'UpdateConfig',
+    query: {
+      namespace_id: namespace.value,
+      id: row.id,
+    },
+  })
+}
+const deleteConfig = (row: any) => {
+  ElMessageBox.confirm('删除配置立即生效，且无法恢复，确认删除该配置？', '提示', {
+    type: 'warning',
+  }).then(() => {
+    R.postJson(`/api/config/delete`, {
+      namespace_id: namespace.value,
+      id: row.id
+    }).then(() => {
+      loadConfigs()
+    })
   })
 }
 </script>
@@ -64,7 +90,8 @@ const toAddConfig = () => {
             配置列表
           </h1>
           <div class="flex-v half-width">
-            <el-input prefix-icon="search" class="mr10" size="large" placeholder="配置ID/内容模糊搜索"></el-input>
+            <el-input v-model="filterText" prefix-icon="search" class="mr10" size="large"
+                      placeholder="配置ID/内容模糊搜索" @input="loadConfigs" clearable></el-input>
             <el-button type="primary" @click="toAddConfig" icon="plus" size="large">
               创建配置
             </el-button>
@@ -90,12 +117,22 @@ const toAddConfig = () => {
             </template>
           </el-table-column>
           <el-table-column label="操作" width="160">
-            <template v-slot="scope">
-              <el-button type="primary" @click="toEdit(scope.row)">编辑</el-button>
-              <el-button type="danger" @click="toDelete(scope.row)">删除</el-button>
+            <template v-slot="{row}">
+              <el-button type="primary" @click="toUpdateConfig(row)">编辑</el-button>
+              <el-button type="danger" @click="deleteConfig(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+            background
+            layout="prev, pager, next, total"
+            :page-size="page.page_size"
+            :current-page="page.page_num"
+            :total="page.total"
+            hide-on-single-page
+            @current-change="(pageNum) => {page.page_num = pageNum; loadConfigs()}"
+            class="mt10 fr">
+        </el-pagination>
       </div>
     </el-card>
   </div>
