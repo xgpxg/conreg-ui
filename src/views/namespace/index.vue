@@ -162,7 +162,7 @@ const del = (row: any) => {
     </template>
   </el-dialog>
 
-  <el-dialog v-model="isShowUpdate" title="创建命名空间" width="500px" destroy-on-close>
+  <el-dialog v-model="isShowUpdate" title="修改命名空间" width="500px" destroy-on-close>
     <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="50px">
       <el-form-item label="ID" prop="id">
         <div class="fill-width flex-v">

@@ -33,6 +33,14 @@ const routes = [
                 }
             },
             {
+                path: 'config/update-config',
+                name: 'UpdateConfig',
+                component: () => import('@/views/config/update-config.vue'),
+                meta: {
+                    title: '修改配置'
+                }
+            },
+            {
                 path: 'service',
                 name: 'Service',
                 component: () => import('@/views/service/index.vue'),

@@ -3,7 +3,7 @@
 import CopyText from "../../components/Copy/copy-text.vue";
 import SvgIcon from "../../components/SvgIcon/index.vue";
 import {useRoute, useRouter} from "vue-router";
-import {computed, nextTick, ref, watch} from "vue";
+import {computed, nextTick, onMounted, ref, watch} from "vue";
 import {CodeEditor} from 'monaco-editor-vue3';
 import 'monaco-editor-vue3/dist/style.css';
 import {R} from "../../utils/R";
@@ -13,6 +13,9 @@ const router = useRouter();
 const route = useRoute()
 const namespace = computed(() => {
   return route.query.namespace_id
+})
+const id = computed(() => {
+  return route.query.id
 })
 const form = ref({
   namespace_id: namespace.value,
@@ -51,6 +54,21 @@ watch(format, () => {
     isShowCodeEditor.value = true
   })
 })
+onMounted(() => {
+  getConfig()
+})
+
+const getConfig = () => {
+  R.get('/api/config/get', {
+    namespace_id: namespace.value,
+    id: id.value
+  }).then(res => {
+    form.value.id = res.data.id
+    form.value.content = res.data.content
+    // TODO 加个字段保存格式，不要从id解析
+    form.value.format = res.data.format
+  })
+}
 
 const upsertConfig = () => {
   formRef.value.validate((ok) => {
@@ -60,9 +78,8 @@ const upsertConfig = () => {
     ElMessageBox.confirm('配置变更将立即生效，确定发布配置？').then(() => {
       R.postJson('/api/config/upsert', {
         namespace_id: namespace.value,
-        id: form.value.id,
-        content: form.value.content,
-        format: form.value.format,
+        id: form.value.id + '.' + form.value.format,
+        content: form.value.content
       }).then(res => {
         if (res.code === 0) {
           ElMessage.success('发布成功')
@@ -94,11 +111,11 @@ const upsertConfig = () => {
     <div class="mt10">
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px" size="large">
         <el-form-item label="配置ID" prop="id">
-          <el-input v-model="form.id" placeholder="填写配置ID，如：database.yaml" maxlength="100"
-                    show-word-limit></el-input>
+          <el-input v-model="form.id" placeholder="填写配置ID，不包含后缀" maxlength="100" show-word-limit
+                    disabled></el-input>
         </el-form-item>
         <el-form-item label="配置格式" prop="format">
-          <el-radio-group v-model="form.format">
+          <el-radio-group v-model="form.format" disabled>
             <el-radio-button label="yaml" value="yaml"></el-radio-button>
             <el-radio-button label="properties" value="properties" disabled></el-radio-button>
             <el-radio-button label="json" value="json" disabled></el-radio-button>
