@@ -25,6 +25,14 @@ const routes = [
                 }
             },
             {
+                path: 'config/add-config',
+                name: 'AddConfig',
+                component: () => import('@/views/config/add-config.vue'),
+                meta: {
+                    title: '添加配置'
+                }
+            },
+            {
                 path: 'service',
                 name: 'Service',
                 component: () => import('@/views/service/index.vue'),

@@ -13,16 +13,27 @@ const loadNamespaces = () => {
     page_num: 1,
     page_size: 10000
   }).then(res => {
-    namespaces.value = res.data.list.sort((a, b) => new Date(a.create_time) - new Date(b.create_time)).map(item => item.id)
+    namespaces.value = res.data.list.sort((a, b) => new Date(a.create_time) - new Date(b.create_time)).map(item => item)
   })
 }
 </script>
 
 <template>
-  <el-segmented v-model="value" :options="namespaces">
-  </el-segmented>
+  <div class="segmented">
+    <el-segmented v-model="value" :options="namespaces" :props="{value: 'id', label:'name'}" size="large">
+    </el-segmented>
+  </div>
 </template>
 
 <style scoped lang="scss">
-
+.segmented {
+  overflow-x: auto;
+  white-space: nowrap;
+  // 美化滚动条样式
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: #e4e4e4;
+  }
+}
 </style>

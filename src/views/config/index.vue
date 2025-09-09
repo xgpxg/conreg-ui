@@ -5,6 +5,8 @@ import {onMounted, ref, watch} from "vue";
 import {R} from "../../utils/R";
 import {U} from "../../utils/util";
 import NamespaceSegmented from "../namespace/namespace-segmented.vue";
+import {useRouter} from "vue-router";
+const router = useRouter()
 
 const namespace = ref<string>('public')
 const configs = ref([])
@@ -27,6 +29,15 @@ const loadConfigs = () => {
 watch(namespace, () => {
   loadConfigs()
 })
+
+const toAddConfig = () => {
+  router.push({
+    name: 'AddConfig',
+    query: {
+      namespace_id: namespace.value,
+    },
+  })
+}
 </script>
 
 <template>
@@ -36,7 +47,7 @@ watch(namespace, () => {
         <div class="flex-v">
           <h1>配置管理</h1>
           <div class="ml50">
-            命名空间：
+            命名空间ID：
             <el-tag effect="plain">
               {{ namespace }}
               <copy-text :text="namespace"></copy-text>
@@ -54,7 +65,7 @@ watch(namespace, () => {
           </h1>
           <div class="flex-v half-width">
             <el-input prefix-icon="search" class="mr10" size="large" placeholder="配置ID/内容模糊搜索"></el-input>
-            <el-button type="primary" @click="toCreate" icon="plus" size="large">
+            <el-button type="primary" @click="toAddConfig" icon="plus" size="large">
               创建配置
             </el-button>
           </div>
@@ -78,7 +89,7 @@ watch(namespace, () => {
               {{ U.dateUtil.formatDateDefault(new Date(row.update_time)) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="160">
             <template v-slot="scope">
               <el-button type="primary" @click="toEdit(scope.row)">编辑</el-button>
               <el-button type="danger" @click="toDelete(scope.row)">删除</el-button>

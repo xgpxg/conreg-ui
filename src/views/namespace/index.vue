@@ -2,11 +2,13 @@
 import {onMounted, ref, watch} from "vue";
 import {R} from "../../utils/R";
 import {U} from "../../utils/util";
+import {ElMessageBox} from "element-plus";
 
 const namespaces = ref([])
 const page = ref({
   page_num: 1,
   page_size: 10,
+  total: 0
 })
 
 onMounted(() => {
@@ -66,10 +68,25 @@ const upsertNamespace = () => {
     })
   })
 }
+
+const del = (row: any) => {
+  ElMessageBox.confirm(
+      '删除后无法恢复，请确认操作。',
+      '删除命名空间',
+  ).then(() => {
+    R.postJson('/api/namespace/delete', {
+      id: row.id
+    }).then(res => {
+      if (res.code === 0) {
+        loadNamespaces()
+      }
+    })
+  })
+}
 </script>
 
 <template>
-  <div class="">
+  <div class="pdb20">
     <el-card>
       <template #header>
         <div class="flex-v flex-space-between">
@@ -77,27 +94,27 @@ const upsertNamespace = () => {
             命名空间
           </h1>
           <div class="">
-            <el-button type="primary" icon="plus" size="large" @click="isShowAdd=true">
+            <el-button type="primary" icon="plus" size="large" @click="form={};isShowAdd=true">
               创建命名空间
             </el-button>
           </div>
         </div>
       </template>
-      <div class="mt20">
+      <div class="mt10">
         <el-table :data="namespaces">
           <el-table-column label="ID" width="250">
             <template v-slot="{row}">
               {{ row.id }}
             </template>
           </el-table-column>
-          <el-table-column label="名称" prop="name">
+          <el-table-column label="名称" prop="name" show-overflow-tooltip>
           </el-table-column>
-          <el-table-column label="描述" prop="description">
+          <el-table-column label="描述" prop="description" show-overflow-tooltip>
             <template v-slot="{row}">
               {{ row.description ? row.description : '-' }}
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" prop="create_time">
+          <el-table-column label="创建时间" prop="create_time" width="200">
             <template v-slot="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.create_time)) }}
             </template>
@@ -105,10 +122,19 @@ const upsertNamespace = () => {
           <el-table-column label="操作" width="160">
             <template v-slot="{row}">
               <el-button type="primary" @click="form = row;isShowUpdate=true">编辑</el-button>
-              <el-button type="danger" @click="toDelete(row)" :disabled="row.id === 'public'">删除</el-button>
+              <el-button type="danger" @click="del(row)" :disabled="row.id === 'public'">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+            background
+            layout="prev, pager, next, total"
+            :page-size="page.page_size"
+            :current-page="page.page_num"
+            :total="page.total"
+            @current-change="loadNamespaces"
+            class="mt10 fr">
+        </el-pagination>
       </div>
     </el-card>
   </div>

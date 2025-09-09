@@ -36,7 +36,7 @@ watch(namespace, () => {
         <div class="flex-v">
           <h1>服务管理</h1>
           <div class="ml50">
-            命名空间：
+            命名空间ID：
             <el-tag effect="plain">public
               <copy-text :text="'public'"></copy-text>
             </el-tag>
@@ -72,7 +72,6 @@ watch(namespace, () => {
               {{ row.service_id }}
             </template>
           </el-table-column>
-          <el-table-column label="状态"></el-table-column>
           <el-table-column label="实例数量">
             <template v-slot={row}>
               <div class="number">
@@ -80,12 +79,12 @@ watch(namespace, () => {
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" prop="create_time">
+          <el-table-column label="注册时间" prop="create_time">
             <template v-slot="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.create_time)) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="160">
             <template v-slot="{row}">
               <el-button type="primary" @click="toEdit(row)">编辑</el-button>
               <el-button type="danger" @click="toDelete(row)">删除</el-button>

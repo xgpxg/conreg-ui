@@ -11,7 +11,7 @@
       </div>
     </div>
     <el-menu
-        :default-active="$route.path"
+        :default-active="'/'+$route.path.split('/')[1]"
         router
         :collapse="isCollapse"
         :collapse-transition="false"
