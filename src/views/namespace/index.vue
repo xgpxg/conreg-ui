@@ -132,7 +132,8 @@ const del = (row: any) => {
             :page-size="page.page_size"
             :current-page="page.page_num"
             :total="page.total"
-            @current-change="loadNamespaces"
+            hide-on-single-page
+            @current-change="(pageNum: number) => {page.page_num = pageNum; loadNamespaces()}"
             class="mt10 fr">
         </el-pagination>
       </div>

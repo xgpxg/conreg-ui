@@ -130,7 +130,7 @@ const deleteConfig = (row: any) => {
             :current-page="page.page_num"
             :total="page.total"
             hide-on-single-page
-            @current-change="(pageNum) => {page.page_num = pageNum; loadConfigs()}"
+            @current-change="(pageNum: number) => {page.page_num = pageNum; loadConfigs()}"
             class="mt10 fr">
         </el-pagination>
       </div>
