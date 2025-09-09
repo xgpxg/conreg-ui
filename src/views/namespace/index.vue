@@ -23,15 +23,14 @@ const namespace = ref<string>('public')
       </template>
       <div class="mt20">
         <el-table>
-          <el-table-column label="服务ID">
+          <el-table-column label="ID">
             <template v-slot="scope">
               <el-tag>{{ scope.row.id }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="状态"></el-table-column>
-          <el-table-column label="实例数量"></el-table-column>
+          <el-table-column label="名称"></el-table-column>
+          <el-table-column label="描述"></el-table-column>
           <el-table-column label="创建时间"></el-table-column>
-          <el-table-column label="最后修改时间"></el-table-column>
           <el-table-column label="操作">
             <template v-slot="scope">
               <el-button type="primary" @click="toEdit(scope.row)">编辑</el-button>

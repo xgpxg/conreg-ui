@@ -133,7 +133,8 @@ export default {
 .logo {
   font-weight: bold;
   padding: 10px 20px;
-  height: 30px;
+  font-size: 18px;
+  height: 35px;
 }
 
 </style>

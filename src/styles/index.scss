@@ -66,4 +66,14 @@ input, button {
 }
 
 
-$gray-color: #909399
+$gray-color: #909399;
+
+.number {
+  font-family: 'SF Mono', 'Segoe UI Mono', 'Roboto Mono', 'Courier New', monospace;
+  font-weight: 600;
+  font-size: 14px;
+  color: #303133;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}

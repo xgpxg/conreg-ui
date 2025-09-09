@@ -1,10 +1,32 @@
 <script setup lang="ts">
 
 import CopyText from "../../components/Copy/copy-text.vue";
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import NamespaceSegmented from "../namespace/namespace-segmented.vue";
+import {R} from "../../utils/R";
+import {U} from "../../utils/util";
 
 const namespace = ref<string>('public')
+const services = ref([])
+const page = ref({
+  page_num: 1,
+  page_size: 10,
+})
+onMounted(() => {
+  loadConfigs()
+})
+const loadConfigs = () => {
+  R.get('/api/discovery/service/list', {
+    ...page.value,
+    namespace_id: namespace.value,
+  }).then(res => {
+    services.value = res.data.list
+    page.value.total = res.data.total
+  })
+}
+watch(namespace, () => {
+  loadConfigs()
+})
 </script>
 
 <template>
@@ -44,20 +66,29 @@ const namespace = ref<string>('public')
         </div>
       </div>
       <div class="mt20">
-        <el-table>
+        <el-table :data="services">
           <el-table-column label="服务ID">
-            <template v-slot="scope">
-              <el-tag>{{ scope.row.id }}</el-tag>
+            <template v-slot={row}>
+              {{ row.service_id }}
             </template>
           </el-table-column>
           <el-table-column label="状态"></el-table-column>
-          <el-table-column label="实例数量"></el-table-column>
-          <el-table-column label="创建时间"></el-table-column>
-          <el-table-column label="最后修改时间"></el-table-column>
+          <el-table-column label="实例数量">
+            <template v-slot={row}>
+              <div class="number">
+                {{ row.state.up_instances }} / {{ row.state.total_instances }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" prop="create_time">
+            <template v-slot="{row}">
+              {{ U.dateUtil.formatDateDefault(new Date(row.create_time)) }}
+            </template>
+          </el-table-column>
           <el-table-column label="操作">
-            <template v-slot="scope">
-              <el-button type="primary" @click="toEdit(scope.row)">编辑</el-button>
-              <el-button type="danger" @click="toDelete(scope.row)">删除</el-button>
+            <template v-slot="{row}">
+              <el-button type="primary" @click="toEdit(row)">编辑</el-button>
+              <el-button type="danger" @click="toDelete(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

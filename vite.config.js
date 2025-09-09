@@ -21,7 +21,7 @@ export default defineConfig(async () => ({
         }
     },
     server: {
-        port: 5011,
+        port: 9000,
         strictPort: true,
         proxy: {
             '/api/': {
