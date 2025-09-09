@@ -37,8 +37,9 @@ watch(namespace, () => {
           <h1>配置管理</h1>
           <div class="ml50">
             命名空间：
-            <el-tag effect="plain">public
-              <copy-text :text="'public'"></copy-text>
+            <el-tag effect="plain">
+              {{ namespace }}
+              <copy-text :text="namespace"></copy-text>
             </el-tag>
           </div>
         </div>

@@ -38,7 +38,8 @@
   //box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
   box-shadow: none !important;
   border: none;
-  .el-card__header{
+
+  .el-card__header {
     padding: 0 20px 50px 20px;
     height: 50px;
   }
@@ -145,10 +146,12 @@
   }
 
   .el-table {
-    border: none; // 移除默认边框
+    border-top: 0;
+    border-right: 1px solid #ececec;
+    border-bottom: 0;
+    border-left: 1px solid #ececec;
     border-top: 1px solid #e8e8e8; // 顶部线
     font-size: 14px;
-    color: #666;
     width: 100%;
     border-radius: 5px; // 移除圆角
 
@@ -161,7 +164,7 @@
     }
 
     th {
-      background: transparent; // 透明背景
+      background: #fafafa;
       color: #333;
       border-bottom: 1px solid #e8e8e8; // 表头底部线
       padding: 12px 0;
