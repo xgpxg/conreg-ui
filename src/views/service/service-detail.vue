@@ -3,7 +3,7 @@
 import CopyText from "../../components/Copy/copy-text.vue";
 import SvgIcon from "../../components/SvgIcon/index.vue";
 import {useRoute, useRouter} from "vue-router";
-import {computed, nextTick, onMounted, ref, watch} from "vue";
+import {computed, nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 import {CodeEditor} from 'monaco-editor-vue3';
 import 'monaco-editor-vue3/dist/style.css';
 import {R} from "../../utils/R";
@@ -31,6 +31,13 @@ const loadInstances = () => {
     }
   })
 }
+const timer = setInterval(() => {
+  loadInstances()
+}, 5000)
+onUnmounted(() => {
+  clearInterval(timer)
+})
+
 </script>
 
 <template>
@@ -51,15 +58,20 @@ const loadInstances = () => {
       </div>
     </template>
     <div class="mt10">
-      <div class="flex-v">
-        <el-select placeholder="实例状态" class="mr10">
-          <el-option label="全部" value=""></el-option>
-          <el-option label="正常" value="normal"></el-option>
-          <el-option label="异常" value="abnormal"></el-option>
-          <el-option label="下线" value="offline"></el-option>
-        </el-select>
-        <el-input placeholder="IP/端口模糊搜索" prefix-icon="search" class="mr10"></el-input>
-        <el-button type="primary">查询</el-button>
+      <div class="flex-space-between">
+        <div>
+          <h3>服务实例</h3>
+        </div>
+        <div class="half-width flex-v">
+          <el-select placeholder="实例状态" class="mr10">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="正常" value="up"></el-option>
+            <el-option label="异常" value="sick"></el-option>
+            <el-option label="下线" value="offline"></el-option>
+          </el-select>
+          <el-input placeholder="IP/端口模糊搜索" prefix-icon="search" class="mr10"></el-input>
+          <el-button type="primary" @click="loadInstances">查询</el-button>
+        </div>
       </div>
     </div>
     <div class="mt10">
@@ -76,7 +88,12 @@ const loadInstances = () => {
         </el-table-column>
         <el-table-column label="实例状态">
           <template #default="{ row }">
-            <el-tag v-if="row.status === 'Up'" type="success" effect="dark">正常</el-tag>
+            <el-tag v-if="row.status === 'Up'" type="success" effect="dark" disable-transitions>正常</el-tag>
+            <el-tag v-if="row.status === 'Offline'" type="info" effect="dark" disable-transitions>已下线</el-tag>
+            <el-tag v-if="row.status === 'Down'" type="info" effect="dark" disable-transitions>已离线，即将清理</el-tag>
+            <el-tag v-else-if="row.status['Sick']" type="warning" effect="dark" disable-transitions>Sick:
+              {{ row.status['Sick'] }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="元数据">
