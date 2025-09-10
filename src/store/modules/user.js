@@ -1,23 +1,19 @@
 const state = {
     isLogin: false,
     token: '',
-    nickname: '',
-    avatar: '',
-    email: '',
-    other: {
-        password_has_set: false
-    }
+    username: '',
 }
 
 //初始化
-const initState = (state, token) => {
+const initState = (state, token, username) => {
     if (token) {
         state.token = token
         state.isLogin = true
+        state.username = username
     }
 }
 
-initState(state, localStorage.getItem('token'))
+initState(state, localStorage.getItem('token'), localStorage.getItem('username'))
 
 
 const mutations = {
@@ -26,23 +22,15 @@ const mutations = {
         state.isLogin = true
         localStorage.setItem('token', token)
     },
-    setNickname: (state, nickname) => {
-        state.nickname = nickname
+    setUsername: (state, username) => {
+        state.username = username
+        localStorage.setItem('username', username)
     },
-    setAvatar: (state, avatar) => {
-        state.avatar = avatar
-    },
-    setEmail: (state, email) => {
-        state.email = email
-    },
-    setOther: (state, other) => {
-        state.other = other
-    },
+
     resetToken: (state) => {
         state.isLogin = false
         state.token = ''
-        state.nickname = ''
-        state.avatar = ''
+        state.username = ''
         localStorage.removeItem('token')
         localStorage.removeItem('debug_app')
     },

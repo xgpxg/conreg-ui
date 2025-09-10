@@ -4,12 +4,13 @@ import {ElButton, ElForm, ElFormItem, ElInput} from 'element-plus'
 import {User, Lock} from '@element-plus/icons-vue'
 import SvgIcon from "../../components/SvgIcon/index.vue";
 import {useRouter} from "vue-router";
+import {R} from "../../utils/R";
+import store from "@/store";
 
 const router = useRouter()
 const loginForm = ref({
   username: '',
   password: '',
-  rememberMe: false
 })
 
 const rules = {
@@ -31,9 +32,18 @@ const login = () => {
       return
     }
     loading.value = true
-    // TODO 登录
 
-    router.replace({name: 'Config'})
+    R.postJson('/api/system/login', {
+      username: loginForm.value.username,
+      password: loginForm.value.password
+    }).then(res => {
+      if (res.code === 0) {
+        store.commit('user/setToken', res.data.token)
+        store.commit('user/setUsername', res.data.username)
+        router.replace({name: 'Config'})
+      }
+      loading.value = false
+    })
 
   })
 }

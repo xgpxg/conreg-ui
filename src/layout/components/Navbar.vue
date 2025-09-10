@@ -22,21 +22,40 @@
           class="nav-icon-button"
           @click="toHome"
           :underline="false">
-        <el-icon>
-          <User></User>
-        </el-icon>
+        <el-dropdown trigger="click">
+          <div class="avatar-wrapper">
+            <el-icon class="user-avatar">
+              <User></User>
+            </el-icon>
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="$refs['updatePassword'].show()">
+                修改密码
+              </el-dropdown-item>
+            </el-dropdown-menu>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="logout">
+                登出
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </el-link>
     </div>
   </div>
+  <update-password ref="updatePassword"></update-password>
 </template>
 
 <script>
 import SvgIcon from "@components/SvgIcon/index.vue";
 import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
+import UpdatePassword from "../../views/login/update-password.vue";
 
 export default {
   components: {
+    UpdatePassword,
     Hamburger,
     SvgIcon,
     Breadcrumb
@@ -61,15 +80,15 @@ export default {
   },
   methods: {
     loadUserInfo() {
-     /* this.R.get('user/center', {}, {repeatable: true}).then(res => {
-        this.$store.commit('user/setAvatar', res.data.base_info.avatar)
-        this.$store.commit('user/setNickname', res.data.base_info.nickname)
-        this.$store.commit('user/setEmail', res.data.base_info.email)
-        this.$store.commit('user/setOther', res.data.other)
-      })*/
+      /* this.R.get('user/center', {}, {repeatable: true}).then(res => {
+         this.$store.commit('user/setAvatar', res.data.base_info.avatar)
+         this.$store.commit('user/setNickname', res.data.base_info.nickname)
+         this.$store.commit('user/setEmail', res.data.base_info.email)
+         this.$store.commit('user/setOther', res.data.other)
+       })*/
     },
     logout() {
-      this.R.postJson('user/logout', {}, {repeatable: true}).then(res => {
+      this.R.postJson('/api/system/logout', {}, {repeatable: true}).then(res => {
         if (res.code === 0) {
           this.$router.replace({name: 'Login'})
         }
