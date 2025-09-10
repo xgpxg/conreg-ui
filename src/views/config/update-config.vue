@@ -65,7 +65,6 @@ const getConfig = () => {
   }).then(res => {
     form.value.id = res.data.id
     form.value.content = res.data.content
-    // TODO 加个字段保存格式，不要从id解析
     form.value.format = res.data.format
   })
 }
@@ -78,8 +77,9 @@ const upsertConfig = () => {
     ElMessageBox.confirm('配置变更将立即生效，确定发布配置？').then(() => {
       R.postJson('/api/config/upsert', {
         namespace_id: namespace.value,
-        id: form.value.id + '.' + form.value.format,
-        content: form.value.content
+        id: form.value.id,
+        content: form.value.content,
+        format: form.value.format
       }).then(res => {
         if (res.code === 0) {
           ElMessage.success('发布成功')
