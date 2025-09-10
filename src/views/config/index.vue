@@ -90,9 +90,9 @@ const deleteConfig = (row: any) => {
             配置列表
           </h1>
           <div class="flex-v half-width">
-            <el-input v-model="filterText" prefix-icon="search" class="mr10" size="large"
+            <el-input v-model="filterText" prefix-icon="search" class="mr10"
                       placeholder="配置ID/内容模糊搜索" @input="loadConfigs" clearable></el-input>
-            <el-button type="primary" @click="toAddConfig" icon="plus" size="large">
+            <el-button type="primary" @click="toAddConfig" icon="plus">
               创建配置
             </el-button>
           </div>
@@ -101,23 +101,23 @@ const deleteConfig = (row: any) => {
       <div class="mt20">
         <el-table :data="configs">
           <el-table-column label="配置ID">
-            <template v-slot="{row}">
+            <template #default="{row}">
               {{ row.id }}
             </template>
           </el-table-column>
           <el-table-column label="关联服务"></el-table-column>
           <el-table-column label="创建时间" prop="create_time">
-            <template v-slot="{row}">
+            <template #default="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.create_time)) }}
             </template>
           </el-table-column>
           <el-table-column label="最后修改时间" prop="update_time">
-            <template v-slot="{row}">
+            <template #default="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.update_time)) }}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="160">
-            <template v-slot="{row}">
+            <template #default="{row}">
               <el-button type="primary" @click="toUpdateConfig(row)">编辑</el-button>
               <el-button type="danger" @click="deleteConfig(row)">删除</el-button>
             </template>

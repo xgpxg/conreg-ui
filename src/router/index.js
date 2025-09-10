@@ -49,6 +49,14 @@ const routes = [
                 }
             },
             {
+                path: 'service/detail',
+                name: 'ServiceDetail',
+                component: () => import('@/views/service/service-detail.vue'),
+                meta: {
+                    title: '服务详情'
+                }
+            },
+            {
                 path: 'namespace',
                 name: 'Namespace',
                 component: () => import('@/views/namespace/index.vue'),

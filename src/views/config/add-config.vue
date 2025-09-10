@@ -92,7 +92,7 @@ const upsertConfig = () => {
       </div>
     </template>
     <div class="mt10">
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px" size="large">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="配置ID" prop="id">
           <el-input v-model="form.id" placeholder="填写配置ID，如：database.yaml" maxlength="100"
                     show-word-limit></el-input>

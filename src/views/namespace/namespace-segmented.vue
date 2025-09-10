@@ -20,7 +20,7 @@ const loadNamespaces = () => {
 
 <template>
   <div class="segmented">
-    <el-segmented v-model="value" :options="namespaces" :props="{value: 'id', label:'name'}" size="large">
+    <el-segmented v-model="value" :options="namespaces" :props="{value: 'id', label:'name'}">
     </el-segmented>
   </div>
 </template>

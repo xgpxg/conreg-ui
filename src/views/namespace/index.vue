@@ -94,7 +94,7 @@ const del = (row: any) => {
             命名空间
           </h1>
           <div class="">
-            <el-button type="primary" icon="plus" size="large" @click="form={};isShowAdd=true">
+            <el-button type="primary" icon="plus" @click="form={};isShowAdd=true">
               创建命名空间
             </el-button>
           </div>
@@ -103,24 +103,24 @@ const del = (row: any) => {
       <div class="mt10">
         <el-table :data="namespaces">
           <el-table-column label="ID" width="250">
-            <template v-slot="{row}">
+            <template #default="{row}">
               {{ row.id }}
             </template>
           </el-table-column>
           <el-table-column label="名称" prop="name" show-overflow-tooltip>
           </el-table-column>
           <el-table-column label="描述" prop="description" show-overflow-tooltip>
-            <template v-slot="{row}">
+            <template #default="{row}">
               {{ row.description ? row.description : '-' }}
             </template>
           </el-table-column>
           <el-table-column label="创建时间" prop="create_time" width="200">
-            <template v-slot="{row}">
+            <template #default="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.create_time)) }}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="160">
-            <template v-slot="{row}">
+            <template #default="{row}">
               <el-button type="primary" @click="form = row;isShowUpdate=true">编辑</el-button>
               <el-button type="danger" @click="del(row)" :disabled="row.id === 'public'">删除</el-button>
             </template>
