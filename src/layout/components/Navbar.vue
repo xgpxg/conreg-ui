@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     loadUserInfo() {
-     /* this.R.get('/api/user/center', {}, {repeatable: true}).then(res => {
+     /* this.R.get('user/center', {}, {repeatable: true}).then(res => {
         this.$store.commit('user/setAvatar', res.data.base_info.avatar)
         this.$store.commit('user/setNickname', res.data.base_info.nickname)
         this.$store.commit('user/setEmail', res.data.base_info.email)
@@ -69,7 +69,7 @@ export default {
       })*/
     },
     logout() {
-      this.R.postJson('/api/user/logout', {}, {repeatable: true}).then(res => {
+      this.R.postJson('user/logout', {}, {repeatable: true}).then(res => {
         if (res.code === 0) {
           this.$router.replace({name: 'Login'})
         }
@@ -86,7 +86,7 @@ export default {
       this.$router.push({name: 'Index'})
     },
     loadUnreadCount() {
-      // this.R.get('/api/alert/unread/count').then(res => {
+      // this.R.get('alert/unread/count').then(res => {
       //   this.unreadCount = res.data
       // })
     }

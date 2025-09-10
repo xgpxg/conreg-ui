@@ -2,7 +2,7 @@
   <div class="menu">
     <div class="logo">
       <div class="flex-center" v-if="!collapse">
-        CONREG 0.1.0
+        CONREG {{ version }}
       </div>
       <div v-else>
         <el-image
@@ -47,6 +47,7 @@
 
 <script>
 import SvgIcon from "../../components/SvgIcon/index.vue";
+const VERSION = import.meta.env.VITE_VERSION
 
 export default {
   components: {SvgIcon},
@@ -58,7 +59,11 @@ export default {
       isCollapse: false
     }
   },
-  computed: {},
+  computed: {
+    version(){
+      return VERSION
+    }
+  },
   watch: {
     collapse: {
       handler(newVal) {
