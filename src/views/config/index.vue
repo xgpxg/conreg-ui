@@ -92,6 +92,9 @@ const deleteConfig = (row: any) => {
           <div class="flex-v half-width">
             <el-input v-model="filterText" prefix-icon="search" class="mr10"
                       placeholder="配置ID/内容模糊搜索" @input="loadConfigs" clearable></el-input>
+            <el-button type="primary" @click="loadConfigs" icon="search">
+              查询
+            </el-button>
             <el-button type="primary" @click="toAddConfig" icon="plus">
               创建配置
             </el-button>
