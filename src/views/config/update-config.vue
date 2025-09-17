@@ -98,7 +98,7 @@ const upsertConfig = () => {
         <el-icon size="20" class="mr10 cursor-pointer" @click="router.back()">
           <svg-icon icon-class="back"></svg-icon>
         </el-icon>
-        <h1>创建配置</h1>
+        <h1>修改配置</h1>
         <div class="ml50">
           命名空间ID：
           <el-tag effect="plain">

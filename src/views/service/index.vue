@@ -6,6 +6,7 @@ import NamespaceSegmented from "../namespace/namespace-segmented.vue";
 import {R} from "../../utils/R";
 import {U} from "../../utils/util";
 import {useRouter} from "vue-router";
+import {ElMessageBox} from "element-plus";
 
 const router = useRouter()
 const namespace = ref<string>('public')
@@ -16,9 +17,9 @@ const page = ref({
   total: 0
 })
 onMounted(() => {
-  loadConfigs()
+  loadServices()
 })
-const loadConfigs = () => {
+const loadServices = () => {
   R.get('/api/discovery/service/list', {
     ...page.value,
     namespace_id: namespace.value,
@@ -28,11 +29,11 @@ const loadConfigs = () => {
   })
 }
 watch(namespace, () => {
-  loadConfigs()
+  loadServices()
 })
 
 const timer = setInterval(() => {
-  loadConfigs()
+  loadServices()
 }, 5000)
 onUnmounted(() => {
   clearInterval(timer)
@@ -45,6 +46,21 @@ const toServiceDetail = (row: any) => {
       namespace_id: namespace.value,
       service_id: row.service_id
     },
+  })
+}
+const deleteService = (row: any) => {
+  ElMessageBox.confirm('如果该服务下有存活的实例，仍然会自动注册，请先停止该服务下的所有实例后删除。', '提示', {
+    type: 'warning',
+    confirmButtonText: '确认并删除',
+  }).then(() => {
+    R.postJson('/api/discovery/service/deregister', {
+      namespace_id: namespace.value,
+      service_id: row.service_id,
+    }).then(res => {
+      if (res.code === 0) {
+        loadServices()
+      }
+    })
   })
 }
 </script>
@@ -73,7 +89,7 @@ const toServiceDetail = (row: any) => {
           </h1>
           <div class="flex-v half-width">
             <el-input prefix-icon="search" class="mr10" placeholder="服务ID模糊搜索"></el-input>
-            <el-button type="primary" @click="loadConfigs" icon="search">
+            <el-button type="primary" @click="loadServices" icon="search">
               查询
             </el-button>
           </div>
@@ -101,7 +117,7 @@ const toServiceDetail = (row: any) => {
           <el-table-column label="操作" width="160">
             <template #default="{row}">
               <el-button type="primary" @click="toServiceDetail(row)">详情</el-button>
-              <el-button type="danger" @click="toDelete(row)">删除</el-button>
+              <el-button type="danger" @click="deleteService(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
