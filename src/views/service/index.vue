@@ -73,7 +73,7 @@ const deleteService = (row: any) => {
           <h1>服务管理</h1>
           <div class="ml50">
             命名空间ID：
-            <el-tag effect="plain">public
+            <el-tag effect="plain" disable-transitions>public
               <copy-text :text="'public'"></copy-text>
             </el-tag>
           </div>

@@ -74,7 +74,7 @@ const deleteConfig = (row: any) => {
           <h1>配置管理</h1>
           <div class="ml50">
             命名空间ID：
-            <el-tag effect="plain">
+            <el-tag effect="plain" disable-transitions>
               {{ namespace }}
               <copy-text :text="namespace"></copy-text>
             </el-tag>
