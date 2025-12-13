@@ -7,6 +7,9 @@ import {R} from "../../utils/R";
 import {U} from "../../utils/util";
 import {useRouter} from "vue-router";
 import {ElMessageBox} from "element-plus";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter()
 const namespace = ref<string>('public')
@@ -49,9 +52,9 @@ const toServiceDetail = (row: any) => {
   })
 }
 const deleteService = (row: any) => {
-  ElMessageBox.confirm('如果该服务下有存活的实例，仍然会自动注册，请先停止该服务下的所有实例后删除。', '提示', {
+  ElMessageBox.confirm(t('如果该服务下有存活的实例，仍然会自动注册，请先停止该服务下的所有实例后删除。'), t('提示'), {
     type: 'warning',
-    confirmButtonText: '确认并删除',
+    confirmButtonText: t('确认并删除'),
   }).then(() => {
     R.postJson('/api/discovery/service/deregister', {
       namespace_id: namespace.value,
@@ -70,9 +73,9 @@ const deleteService = (row: any) => {
     <el-card>
       <template #header>
         <div class="flex-v">
-          <h1>服务管理</h1>
+          <h2>{{ t('服务管理') }}</h2>
           <div class="ml50">
-            命名空间ID：
+            {{ t('命名空间ID') }}：
             <el-tag effect="plain" disable-transitions>public
               <copy-text :text="'public'"></copy-text>
             </el-tag>
@@ -84,40 +87,40 @@ const deleteService = (row: any) => {
       </div>
       <div class="mt20">
         <div class="flex-space-between">
-          <h1>
-            服务列表
-          </h1>
+          <h2>
+            {{ t('服务列表') }}
+          </h2>
           <div class="flex-v half-width">
-            <el-input prefix-icon="search" class="mr10" placeholder="服务ID模糊搜索"></el-input>
+            <el-input prefix-icon="search" class="mr10" :placeholder="t('服务ID模糊搜索')"></el-input>
             <el-button type="primary" @click="loadServices" icon="search">
-              查询
+              {{ t('查询') }}
             </el-button>
           </div>
         </div>
       </div>
       <div class="mt20">
         <el-table :data="services">
-          <el-table-column label="服务ID">
+          <el-table-column :label="t('服务ID')">
             <template #default={row}>
               {{ row.service_id }}
             </template>
           </el-table-column>
-          <el-table-column label="实例数量（健康 / 全部）">
+          <el-table-column :label="t('实例数量（健康 / 全部）')">
             <template #default={row}>
               <div class="number">
                 {{ row.state.up_instances }} / {{ row.state.total_instances }}
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="注册时间" prop="create_time">
+          <el-table-column :label="t('注册时间')" prop="create_time">
             <template #default="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.create_time)) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="160">
+          <el-table-column :label="t('操作')" width="190">
             <template #default="{row}">
-              <el-button type="primary" @click="toServiceDetail(row)">详情</el-button>
-              <el-button type="danger" @click="deleteService(row)">删除</el-button>
+              <el-button type="primary" @click="toServiceDetail(row)">{{ t('详情') }}</el-button>
+              <el-button type="danger" @click="deleteService(row)">{{ t('删除') }}</el-button>
             </template>
           </el-table-column>
         </el-table>

@@ -7,6 +7,7 @@
     </div>
 
     <div class="right-menu flex-v">
+      <LocaleSwitcher/>
       <el-link
           href="https://github.com/xgpxg/conreg"
           target="_blank"
@@ -31,12 +32,12 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item @click="$refs['updatePassword'].show()">
-                修改密码
+                {{ t('修改密码') }}
               </el-dropdown-item>
             </el-dropdown-menu>
             <el-dropdown-menu>
               <el-dropdown-item @click="logout">
-                登出
+                {{ t('登出') }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -52,13 +53,16 @@ import SvgIcon from "@components/SvgIcon/index.vue";
 import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
 import UpdatePassword from "../../views/login/update-password.vue";
+import LocaleSwitcher from '@/components/LocaleSwitcher.vue';
+import {useI18n} from 'vue-i18n';
 
 export default {
   components: {
     UpdatePassword,
     Hamburger,
     SvgIcon,
-    Breadcrumb
+    Breadcrumb,
+    LocaleSwitcher
   },
   props: {},
   inject: ['isEnterprise'],
@@ -108,8 +112,12 @@ export default {
       // this.R.get('alert/unread/count').then(res => {
       //   this.unreadCount = res.data
       // })
+    },
+    t(key) {
+      const {t} = useI18n();
+      return t(key);
     }
-  }
+  },
 }
 </script>
 

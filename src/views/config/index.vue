@@ -7,6 +7,9 @@ import {U} from "../../utils/util";
 import NamespaceSegmented from "../namespace/namespace-segmented.vue";
 import {useRouter} from "vue-router";
 import {ElMessageBox} from "element-plus";
+import {useI18n} from 'vue-i18n';
+
+const {t} = useI18n();
 
 const router = useRouter()
 
@@ -53,7 +56,7 @@ const toUpdateConfig = (row: any) => {
   })
 }
 const deleteConfig = (row: any) => {
-  ElMessageBox.confirm('删除配置立即生效，且无法恢复，确认删除该配置？', '提示', {
+  ElMessageBox.confirm(t('删除配置立即生效，且无法恢复，确认删除该配置？'), t('提示'), {
     type: 'warning',
   }).then(() => {
     R.postJson(`/api/config/delete`, {
@@ -71,9 +74,9 @@ const deleteConfig = (row: any) => {
     <el-card>
       <template #header>
         <div class="flex-v">
-          <h1>配置管理</h1>
+          <h2>{{ t('配置管理') }}</h2>
           <div class="ml50">
-            命名空间ID：
+            {{ t('命名空间ID') }}：
             <el-tag effect="plain" disable-transitions>
               {{ namespace }}
               <copy-text :text="namespace"></copy-text>
@@ -86,43 +89,43 @@ const deleteConfig = (row: any) => {
       </div>
       <div class="mt20">
         <div class="flex-space-between">
-          <h1>
-            配置列表
-          </h1>
+          <h2>
+            {{ t('配置列表') }}
+          </h2>
           <div class="flex-v half-width">
             <el-input v-model="filterText" prefix-icon="search" class="mr10"
-                      placeholder="配置ID/内容模糊搜索" @input="loadConfigs" clearable></el-input>
+                      :placeholder="t('配置ID/内容模糊搜索')" @input="loadConfigs" clearable></el-input>
             <el-button type="primary" @click="loadConfigs" icon="search">
-              查询
+              {{ t('查询') }}
             </el-button>
             <el-button type="primary" @click="toAddConfig" icon="plus">
-              创建配置
+              {{ t('创建配置') }}
             </el-button>
           </div>
         </div>
       </div>
       <div class="mt20">
         <el-table :data="configs">
-          <el-table-column label="配置ID">
+          <el-table-column :label="t('配置ID')">
             <template #default="{row}">
               {{ row.id }}
             </template>
           </el-table-column>
-          <el-table-column label="关联服务"></el-table-column>
-          <el-table-column label="创建时间" prop="create_time">
+          <el-table-column :label="t('关联服务')"></el-table-column>
+          <el-table-column :label="t('创建时间')" prop="create_time">
             <template #default="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.create_time)) }}
             </template>
           </el-table-column>
-          <el-table-column label="最后修改时间" prop="update_time">
+          <el-table-column :label="t('最后修改时间')" prop="update_time">
             <template #default="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.update_time)) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="160">
+          <el-table-column :label="t('操作')" width="190">
             <template #default="{row}">
-              <el-button type="primary" @click="toUpdateConfig(row)">编辑</el-button>
-              <el-button type="danger" @click="deleteConfig(row)">删除</el-button>
+              <el-button type="primary" @click="toUpdateConfig(row)">{{ t('编辑') }}</el-button>
+              <el-button type="danger" @click="deleteConfig(row)">{{ t('删除') }}</el-button>
             </template>
           </el-table-column>
         </el-table>

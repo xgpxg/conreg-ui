@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory, createWebHashHistory} from 'vue-router'
 import Layout from '@/layout/index.vue'
+import i18n from '@/locales/index.js'
 
 const routes = [
     // 登录页
@@ -8,7 +9,7 @@ const routes = [
         name: 'Login',
         component: () => import('@/views/login/index.vue'),
         meta: {
-            title: '登录'
+            title: i18n.global.t('登录')
         }
     },
     // 配置管理页
@@ -22,7 +23,7 @@ const routes = [
                 name: 'Config',
                 component: () => import('@/views/config/index.vue'),
                 meta: {
-                    title: '配置管理'
+                    title: i18n.global.t('配置管理')
                 }
             },
             {
@@ -30,7 +31,7 @@ const routes = [
                 name: 'AddConfig',
                 component: () => import('@/views/config/add-config.vue'),
                 meta: {
-                    title: '添加配置'
+                    title: i18n.global.t('添加配置')
                 }
             },
             {
@@ -38,7 +39,7 @@ const routes = [
                 name: 'UpdateConfig',
                 component: () => import('@/views/config/update-config.vue'),
                 meta: {
-                    title: '修改配置'
+                    title: i18n.global.t('修改配置')
                 }
             },
             {
@@ -46,7 +47,7 @@ const routes = [
                 name: 'Service',
                 component: () => import('@/views/service/index.vue'),
                 meta: {
-                    title: '服务管理'
+                    title: i18n.global.t('服务管理')
                 }
             },
             {
@@ -54,7 +55,7 @@ const routes = [
                 name: 'ServiceDetail',
                 component: () => import('@/views/service/service-detail.vue'),
                 meta: {
-                    title: '服务详情'
+                    title: i18n.global.t('服务详情')
                 }
             },
             {
@@ -62,7 +63,7 @@ const routes = [
                 name: 'Namespace',
                 component: () => import('@/views/namespace/index.vue'),
                 meta: {
-                    title: '命名空间'
+                    title: i18n.global.t('命名空间')
                 }
             },
             {
@@ -70,7 +71,7 @@ const routes = [
                 name: 'Cluster',
                 component: () => import('@/views/cluster/index.vue'),
                 meta: {
-                    title: '集群管理'
+                    title: i18n.global.t('集群管理')
                 }
             },
         ]
@@ -87,7 +88,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     // console.log(to, from)
     if (to.meta.title) {
-        document.title = `${to.meta.title}`;
+        document.title = i18n.global.t(to.meta.title);
     }
     next()
 })

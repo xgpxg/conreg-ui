@@ -11,6 +11,9 @@ import router from './router'
 import {R} from './utils/R.js'
 import {U} from './utils/util.js'
 
+// i18n
+import i18n from './locales/index.js'
+
 //Element Plus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -34,6 +37,7 @@ const app = createApp(App);
 app
     .use(store)
     .use(router)
+    .use(i18n)
     .use(ElementPlus, {locale: zhCn,})
     .use(PubSub)
     .component('svg-icon', SvgIcon)

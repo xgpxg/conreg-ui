@@ -24,25 +24,25 @@
         <el-icon>
           <svg-icon icon-class="config"></svg-icon>
         </el-icon>
-        <span>配置管理</span>
+        <span>{{ t('配置管理') }}</span>
       </el-menu-item>
       <el-menu-item index="/service">
         <el-icon>
           <svg-icon icon-class="service"></svg-icon>
         </el-icon>
-        <span>服务管理</span>
+        <span>{{ t('服务管理') }}</span>
       </el-menu-item>
       <el-menu-item index="/namespace">
         <el-icon>
           <svg-icon icon-class="namespace"></svg-icon>
         </el-icon>
-        <span>命名空间</span>
+        <span>{{ t('命名空间') }}</span>
       </el-menu-item>
       <el-menu-item index="/cluster">
         <el-icon>
           <svg-icon icon-class="cluster"></svg-icon>
         </el-icon>
-        <span>集群管理</span>
+        <span>{{ t('集群管理') }}</span>
       </el-menu-item>
     </el-menu>
   </div>
@@ -50,6 +50,7 @@
 
 <script>
 import SvgIcon from "../../components/SvgIcon/index.vue";
+import {useI18n} from 'vue-i18n';
 
 const VERSION = import.meta.env.VITE_VERSION
 
@@ -78,7 +79,12 @@ export default {
   },
   mounted() {
   },
-  methods: {}
+  methods: {
+    t(key) {
+      const { t } = useI18n();
+      return t(key);
+    }
+  }
 }
 </script>
 <style scoped lang="scss">

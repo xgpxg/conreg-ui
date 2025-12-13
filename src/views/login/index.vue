@@ -6,6 +6,9 @@ import SvgIcon from "../../components/SvgIcon/index.vue";
 import {useRouter} from "vue-router";
 import {R} from "../../utils/R";
 import store from "@/store";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter()
 const loginForm = ref({
@@ -15,11 +18,11 @@ const loginForm = ref({
 
 const rules = {
   username: [
-    {required: true, message: '请输入用户名', trigger: 'blur'}
+    {required: true, message: t('请输入用户名'), trigger: 'blur'}
   ],
   password: [
-    {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 6, message: '密码长度至少6位', trigger: 'blur'}
+    {required: true, message: t('请输入密码'), trigger: 'blur'},
+    {min: 6, message: t('密码长度至少6位'), trigger: 'blur'}
   ]
 }
 
@@ -53,8 +56,8 @@ const login = () => {
   <div class="login-container">
     <div class="login-box">
       <div class="login-header">
-        <h1 class="title">Conreg 登录</h1>
-        <p class="subtitle">分布式服务配置和注册中心</p>
+        <h1 class="title">Conreg {{ t('登录') }}</h1>
+        <p class="subtitle">{{ t('分布式服务配置和注册中心') }}</p>
       </div>
 
       <el-form
@@ -67,7 +70,7 @@ const login = () => {
         <el-form-item prop="username">
           <el-input
               v-model="loginForm.username"
-              placeholder="请输入用户名"
+              :placeholder="t('请输入用户名')"
               size="large"
               :prefix-icon="User"
           />
@@ -77,7 +80,7 @@ const login = () => {
           <el-input
               v-model="loginForm.password"
               type="password"
-              placeholder="请输入密码"
+              :placeholder="t('请输入密码')"
               size="large"
               :prefix-icon="Lock"
               show-password
@@ -93,7 +96,7 @@ const login = () => {
               @click="login"
               auto-insert-space
           >
-            登录
+            {{ t('登录') }}
           </el-button>
         </el-form-item>
       </el-form>
