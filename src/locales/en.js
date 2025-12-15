@@ -43,7 +43,6 @@ export default {
   // Config management
   '配置列表': 'Configuration List',
   '配置ID': 'Config ID',
-  '关联服务': 'Associated Services',
   '创建时间': 'Creation Time',
   '最后修改时间': 'Last Modified Time',
   '操作': 'Actions',
@@ -51,17 +50,20 @@ export default {
   '配置ID/内容模糊搜索': 'Config ID/Content Fuzzy Search',
   '删除配置立即生效，且无法恢复，确认删除该配置？': 'Deleting configuration takes effect immediately and cannot be recovered. Confirm to delete this configuration?',
   '提示': 'Prompt',
+  '无描述': 'No Description',
   
   // Add/Update config
   '命名空间ID': 'Namespace ID',
-  '配置格式': 'Config Format',
-  '配置内容': 'Config Content',
+  '配置格式': 'Format',
+  '配置内容': 'Content',
   '请填写配置ID': 'Please fill in the config ID',
   '请填写配置内容': 'Please fill in the config content',
   '请选择配置格式': 'Please select config format',
   '配置变更将立即生效，确定发布配置？': 'Configuration changes take effect immediately. Are you sure to publish the configuration?',
   '发布成功': 'Published Successfully',
   '填写配置ID，如：database.yaml': 'Fill in the config ID, e.g.: database.yaml',
+  '配置描述': 'Description',
+  '请填写配置描述': 'Fill in the config description',
   
   // Cluster management
   'Leader': 'Leader',

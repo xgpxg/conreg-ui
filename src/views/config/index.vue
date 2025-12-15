@@ -111,7 +111,16 @@ const deleteConfig = (row: any) => {
               {{ row.id }}
             </template>
           </el-table-column>
-          <el-table-column :label="t('关联服务')"></el-table-column>
+          <el-table-column :label="t('描述')">
+            <template #default="{row}">
+              <template v-if="row.description">
+                {{ row.description }}
+              </template>
+              <template v-else>
+                <el-text type="info">-</el-text>
+              </template>
+            </template>
+          </el-table-column>
           <el-table-column :label="t('创建时间')" prop="create_time">
             <template #default="{row}">
               {{ U.dateUtil.formatDateDefault(new Date(row.create_time)) }}

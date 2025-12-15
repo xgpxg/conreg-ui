@@ -21,7 +21,8 @@ const form = ref({
   namespace_id: namespace.value,
   id: null,
   content: '',
-  format: 'yaml'
+  format: 'yaml',
+  description: null
 })
 const formRef = ref()
 const rules = {
@@ -66,6 +67,7 @@ const upsertConfig = () => {
         id: form.value.id,
         content: form.value.content,
         format: form.value.format,
+        description: form.value.description
       }).then(res => {
         if (res.code === 0) {
           ElMessage.success(t('发布成功'))
@@ -95,7 +97,7 @@ const upsertConfig = () => {
       </div>
     </template>
     <div class="mt10">
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="90px">
         <el-form-item :label="t('配置ID')" prop="id">
           <el-input v-model="form.id" :placeholder="t('填写配置ID，如：database.yaml')" maxlength="100"
                     show-word-limit></el-input>
@@ -108,6 +110,10 @@ const upsertConfig = () => {
             <el-radio-button label="toml" value="toml" disabled></el-radio-button>
             <el-radio-button label="txt" value="txt" disabled></el-radio-button>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="t('配置描述')" prop="id">
+          <el-input v-model="form.description" :placeholder="t('请填写配置描述')" maxlength="200"
+                    show-word-limit></el-input>
         </el-form-item>
         <el-form-item :label="t('配置内容')" prop="content">
           <div class="code-editor">
