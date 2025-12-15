@@ -89,6 +89,7 @@ export default {
   '命名空间ID用于配置/服务隔离，不能重复，创建后不可修改': 'Namespace ID is used for configuration/service isolation, cannot be duplicated, and cannot be modified after creation',
   '删除后无法恢复，请确认操作。': 'Cannot be recovered after deletion, please confirm the operation.',
   '删除命名空间': 'Delete Namespace',
+  '修改命名空间': 'Update Namespace',
   
   // Service management
   '服务列表': 'Service List',

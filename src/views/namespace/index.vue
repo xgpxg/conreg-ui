@@ -144,13 +144,13 @@ const del = (row: any) => {
   </div>
 
   <el-dialog v-model="isShowAdd" :title="t('创建命名空间')" width="500px" destroy-on-close>
-    <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="50px">
+    <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="auto">
       <el-form-item :label="t('ID')" prop="id">
         <div class="fill-width flex-v">
           <el-input v-model="form.id" :placeholder="t('请填写命名空间ID')"></el-input>
           <el-button class="ml10" @click="randomId">{{ t('随机生成') }}</el-button>
         </div>
-        <el-text size="small" type="info">{{ t('命名空间ID用于配置/服务隔离，不能重复，创建后不可修改') }}</el-text>
+        <el-text size="small" type="info" class="compact mt5">{{ t('命名空间ID用于配置/服务隔离，不能重复，创建后不可修改') }}</el-text>
       </el-form-item>
       <el-form-item :label="t('名称')" prop="name">
         <el-input v-model="form.name" :placeholder="t('请填写命名空间名称')"></el-input>
@@ -166,12 +166,12 @@ const del = (row: any) => {
   </el-dialog>
 
   <el-dialog v-model="isShowUpdate" :title="t('修改命名空间')" width="500px" destroy-on-close>
-    <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="50px">
+    <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="auto">
       <el-form-item :label="t('ID')" prop="id">
         <div class="fill-width flex-v">
           <el-input v-model="form.id" :placeholder="t('请填写命名空间ID')" disabled></el-input>
         </div>
-        <el-text size="small" type="info">{{ t('命名空间ID用于配置/服务隔离，不能重复，创建后不可修改') }}</el-text>
+        <el-text size="small" type="info" class="compact mt5">{{ t('命名空间ID用于配置/服务隔离，不能重复，创建后不可修改') }}</el-text>
       </el-form-item>
       <el-form-item :label="t('名称')" prop="name">
         <el-input v-model="form.name" :placeholder="t('请填写命名空间名称')"></el-input>
