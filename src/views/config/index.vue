@@ -6,8 +6,9 @@ import {R} from "../../utils/R";
 import {U} from "../../utils/util";
 import NamespaceSegmented from "../namespace/namespace-segmented.vue";
 import {useRouter} from "vue-router";
-import {ElMessageBox} from "element-plus";
+import {ElMessageBox, ElMessage} from "element-plus";
 import {useI18n} from 'vue-i18n';
+import axios from "axios";
 
 const {t} = useI18n();
 
@@ -21,19 +22,23 @@ const page = ref({
   total: 0
 })
 const filterText = ref(null)
+const selectedConfigs = ref([])
+
 onMounted(() => {
   loadConfigs()
 })
+
 const loadConfigs = () => {
   R.get('/api/config/list', {
     ...page.value,
     namespace_id: namespace.value,
     filter_text: filterText.value
-  }).then(res => {
+  }).then((res: any) => {
     configs.value = res.data.list
     page.value.total = res.data.total
   })
 }
+
 watch(namespace, () => {
   loadConfigs()
 })
@@ -46,6 +51,7 @@ const toAddConfig = () => {
     },
   })
 }
+
 const toUpdateConfig = (row: any) => {
   router.push({
     name: 'UpdateConfig',
@@ -55,6 +61,7 @@ const toUpdateConfig = (row: any) => {
     },
   })
 }
+
 const deleteConfig = (row: any) => {
   ElMessageBox.confirm(t('删除配置立即生效，且无法恢复，确认删除该配置？'), t('提示'), {
     type: 'warning',
@@ -66,6 +73,35 @@ const deleteConfig = (row: any) => {
       loadConfigs()
     })
   })
+}
+
+
+const exportConfig = () => {
+  if (selectedConfigs.value.length === 0) {
+    ElMessage.warning(t('请选择要导出的配置'));
+    return;
+  }
+
+  const fileName = `${namespace.value}.zip`
+  R.download(`/api/api/config/export`, 'post', {
+    namespace_id: namespace.value,
+    ids: selectedConfigs.value.map(item => item.id),
+    is_all: false
+  }, null, {fileName})
+}
+
+const exportAllConfig = () => {
+  const fileName = `${namespace.value}.zip`
+  R.download(`/api/api/config/export`, 'post', {
+    namespace_id: namespace.value,
+    ids: [],
+    is_all: true
+  }, null, {fileName})
+}
+
+
+const handleSelectionChange = (val: []) => {
+  selectedConfigs.value = val;
 }
 </script>
 
@@ -105,7 +141,8 @@ const deleteConfig = (row: any) => {
         </div>
       </div>
       <div class="mt20">
-        <el-table :data="configs">
+        <el-table :data="configs" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column :label="t('配置ID')">
             <template #default="{row}">
               {{ row.id }}
@@ -138,6 +175,23 @@ const deleteConfig = (row: any) => {
             </template>
           </el-table-column>
         </el-table>
+        <div class="mt10 fl">
+          <!--          <el-button type="primary" @click="exportConfig">{{ t('克隆') }}</el-button>-->
+          <el-dropdown placement="bottom-start">
+            <el-button type="primary">
+              {{ t('导出') }}
+              <el-icon class="el-icon--right">
+                <arrow-down/>
+              </el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="exportConfig">{{ t('导出所选') }}</el-dropdown-item>
+                <el-dropdown-item @click="exportAllConfig">{{ t('导出全部') }}</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
         <el-pagination
             background
             layout="prev, pager, next, total"

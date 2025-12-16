@@ -3,7 +3,6 @@ if (window.__POWERED_BY_WUJIE__) {
     window.__webpack_public_path__ = window.__WUJIE_PUBLIC_PATH__;
 }
 
-
 import {createApp} from 'vue'
 import App from './App.vue'
 import store from './store'
@@ -19,6 +18,10 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import en from 'element-plus/dist/locale/en.mjs'
+
+const userLocale = localStorage.getItem('locale');
+const locale = userLocale === 'zh-cn' ? zhCn : en;
 
 //qs
 import qs from 'qs'
@@ -38,7 +41,7 @@ app
     .use(store)
     .use(router)
     .use(i18n)
-    .use(ElementPlus, {locale: zhCn,})
+    .use(ElementPlus, {locale})
     .use(PubSub)
     .component('svg-icon', SvgIcon)
 
