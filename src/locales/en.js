@@ -57,6 +57,13 @@ export default {
     '导出所选': 'Export Selected',
     '导出全部': 'Export All',
     '请选择要导出的配置': 'Please select the config to export',
+    '导入': 'Import',
+    '导入成功': 'Import Successfully',
+    '导入并覆盖': 'Import and Overwrite',
+    '导入不覆盖': 'Import without Overwrite',
+    '导入配置将覆盖同名配置，确认导入吗？': 'Importing configuration will overwrite configurations with the same name. Confirm to import?',
+    '导入配置将跳过同名配置，确认导入吗？': 'Importing configuration will skip configurations with the same name. Confirm to import?',
+
     // Add/Update config
     '命名空间ID': 'Namespace ID',
     '配置格式': 'Format',

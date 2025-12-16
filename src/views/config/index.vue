@@ -23,6 +23,7 @@ const page = ref({
 })
 const filterText = ref(null)
 const selectedConfigs = ref([])
+const fileInputRef = ref()
 
 onMounted(() => {
   loadConfigs()
@@ -99,6 +100,46 @@ const exportAllConfig = () => {
   }, null, {fileName})
 }
 
+const importConfig = (isOverwrite: boolean) => {
+  fileInputRef.value && fileInputRef.value.click()
+
+  const handleChange = (event: any) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    ElMessageBox.confirm(
+      isOverwrite
+        ? t('导入配置将覆盖同名配置，确认导入吗？')
+        : t('导入配置将跳过同名配置，确认导入吗？'),
+      t('提示'),
+      {
+        type: 'warning'
+      }
+    ).then(() => {
+      R.upload(`/api/config/import`, file, {
+        namespace_id: namespace.value,
+        is_overwrite: isOverwrite
+      }).then((res: any) => {
+        if (res.code === 0) {
+          ElMessage.success(t('导入成功'))
+          loadConfigs()
+        }
+        // 清空文件输入框
+        event.target.value = ''
+      })
+    }).catch(() => {
+      // 取消导入时清空文件输入框
+      event.target.value = ''
+    })
+  }
+
+  // 创建临时文件输入元素
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = '.zip'
+  input.onchange = handleChange
+  input.click()
+}
 
 const handleSelectionChange = (val: []) => {
   selectedConfigs.value = val;
@@ -175,8 +216,22 @@ const handleSelectionChange = (val: []) => {
             </template>
           </el-table-column>
         </el-table>
-        <div class="mt10 fl">
+        <div class="mt10 fl mb10">
           <!--          <el-button type="primary" @click="exportConfig">{{ t('克隆') }}</el-button>-->
+          <el-dropdown placement="bottom-start" class="mr10">
+            <el-button type="primary">
+              {{ t('导入') }}
+              <el-icon class="el-icon--right">
+                <arrow-down/>
+              </el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="importConfig(true)">{{ t('导入并覆盖') }}</el-dropdown-item>
+                <el-dropdown-item @click="importConfig(false)">{{ t('导入不覆盖') }}</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
           <el-dropdown placement="bottom-start">
             <el-button type="primary">
               {{ t('导出') }}
@@ -200,7 +255,7 @@ const handleSelectionChange = (val: []) => {
             :total="page.total"
             hide-on-single-page
             @current-change="(pageNum: number) => {page.page_num = pageNum; loadConfigs()}"
-            class="mt10 fr">
+            class="mt10 fr mb10">
         </el-pagination>
       </div>
     </el-card>
