@@ -45,6 +45,7 @@ export default {
     '配置列表': 'Configuration List',
     '配置ID': 'Config ID',
     '创建时间': 'Creation Time',
+    '更新时间': 'Update Time',
     '最后修改时间': 'Last Modified Time',
     '操作': 'Actions',
     '创建配置': 'Create Configuration',
@@ -63,6 +64,25 @@ export default {
     '导入不覆盖': 'Import without Overwrite',
     '导入配置将覆盖同名配置，确认导入吗？': 'Importing configuration will overwrite configurations with the same name. Confirm to import?',
     '导入配置将跳过同名配置，确认导入吗？': 'Importing configuration will skip configurations with the same name. Confirm to import?',
+
+    // Config History
+    '配置历史': 'Config History',
+    '配置历史记录': 'Config History Records',
+    '历史': 'History',
+    '版本ID': 'Version ID',
+    'MD5': 'MD5',
+    '确定要恢复到该历史版本吗？': 'Are you sure you want to restore to this historical version?',
+    '确认恢复': 'Confirm Restore',
+    '配置恢复成功': 'Configuration restored successfully',
+
+    // Config Comparison
+    '配置对比': 'Config Comparison',
+    '选中配置': 'Selected Config',
+    '最新配置': 'Latest Config',
+    '恢复': 'Recover',
+    '对比': 'Compare',
+    '关闭': 'Close',
+    '-': '-',
 
     // Add/Update config
     '命名空间ID': 'Namespace ID',

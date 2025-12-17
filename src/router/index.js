@@ -43,6 +43,14 @@ const routes = [
                 }
             },
             {
+                path: 'config/config-history',
+                name: 'ConfigHistory',
+                component: () => import('@/views/config/config-history.vue'),
+                meta: {
+                    title: i18n.global.t('配置历史')
+                }
+            },
+            {
                 path: 'service',
                 name: 'Service',
                 component: () => import('@/views/service/index.vue'),

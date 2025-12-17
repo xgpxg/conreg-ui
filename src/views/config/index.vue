@@ -76,6 +76,16 @@ const deleteConfig = (row: any) => {
   })
 }
 
+const toConfigHistory = (row: any) => {
+  router.push({
+    name: 'ConfigHistory',
+    query: {
+      namespace_id: namespace.value,
+      id: row.id,
+    },
+  })
+}
+
 
 const exportConfig = () => {
   if (selectedConfigs.value.length === 0) {
@@ -108,13 +118,13 @@ const importConfig = (isOverwrite: boolean) => {
     if (!file) return
 
     ElMessageBox.confirm(
-      isOverwrite
-        ? t('导入配置将覆盖同名配置，确认导入吗？')
-        : t('导入配置将跳过同名配置，确认导入吗？'),
-      t('提示'),
-      {
-        type: 'warning'
-      }
+        isOverwrite
+            ? t('导入配置将覆盖同名配置，确认导入吗？')
+            : t('导入配置将跳过同名配置，确认导入吗？'),
+        t('提示'),
+        {
+          type: 'warning'
+        }
     ).then(() => {
       R.upload(`/api/config/import`, file, {
         namespace_id: namespace.value,
@@ -209,9 +219,10 @@ const handleSelectionChange = (val: []) => {
               {{ U.dateUtil.formatDateDefault(new Date(row.update_time)) }}
             </template>
           </el-table-column>
-          <el-table-column :label="t('操作')" width="190">
+          <el-table-column :label="t('操作')" width="260">
             <template #default="{row}">
               <el-button type="primary" @click="toUpdateConfig(row)">{{ t('编辑') }}</el-button>
+              <el-button type="primary" @click="toConfigHistory(row)">{{ t('历史') }}</el-button>
               <el-button type="danger" @click="deleteConfig(row)">{{ t('删除') }}</el-button>
             </template>
           </el-table-column>
