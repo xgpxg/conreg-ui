@@ -40,6 +40,11 @@ export default {
     '请输入密码': 'Please enter password',
     '密码长度至少6位': 'Password must be at least 6 characters',
     '登录状态已失效，请重新登录': 'Login status has expired, please log in again',
+    '新密码': 'New Password',
+    '请填写新密码': 'Please enter new password',
+    '确认密码': 'Confirm Password',
+    '请填写确认密码': 'Please confirm new password',
+
 
     // Config management
     '配置列表': 'Configuration List',

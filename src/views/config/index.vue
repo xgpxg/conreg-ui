@@ -5,16 +5,17 @@ import {onMounted, ref, watch} from "vue";
 import {R} from "../../utils/R";
 import {U} from "../../utils/util";
 import NamespaceSegmented from "../namespace/namespace-segmented.vue";
-import {useRouter} from "vue-router";
+import {useRouter, useRoute} from "vue-router";
 import {ElMessageBox, ElMessage} from "element-plus";
 import {useI18n} from 'vue-i18n';
 import axios from "axios";
 
 const {t} = useI18n();
-
+const route = useRoute();
 const router = useRouter()
 
-const namespace = ref<string>('public')
+// 从路由参数初始化namespace，如果没有则默认为'public'
+const namespace = ref<string>(route.query.namespace_id?.toString() || 'public')
 const configs = ref([])
 const page = ref({
   page_num: 1,
@@ -40,7 +41,16 @@ const loadConfigs = () => {
   })
 }
 
-watch(namespace, () => {
+// 监听namespace变化，同时更新路由参数
+watch(namespace, (newNamespace) => {
+  // 更新URL中的查询参数但不刷新页面
+  router.replace({
+    query: {
+      ...route.query,
+      namespace_id: newNamespace
+    }
+  });
+
   loadConfigs()
 })
 

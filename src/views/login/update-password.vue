@@ -62,7 +62,7 @@ const updatePassword = () => {
 
 <template>
   <el-dialog v-model="isShow" :title="t('修改密码')" width="500">
-    <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
+    <el-form ref="formRef" :model="form" :rules="rules" label-width="auto">
       <el-form-item :label="t('用户名')">
         {{ user.username }}
       </el-form-item>
