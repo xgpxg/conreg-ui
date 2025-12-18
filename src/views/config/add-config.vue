@@ -111,7 +111,7 @@ const upsertConfig = () => {
             <el-radio-button label="txt" value="txt" disabled></el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="t('配置描述')" prop="id">
+        <el-form-item :label="t('配置描述')" prop="description">
           <el-input v-model="form.description" :placeholder="t('请填写配置描述')" maxlength="200"
                     show-word-limit></el-input>
         </el-form-item>

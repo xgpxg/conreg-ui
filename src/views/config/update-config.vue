@@ -8,9 +8,9 @@ import {CodeEditor} from 'monaco-editor-vue3';
 import 'monaco-editor-vue3/dist/style.css';
 import {R} from "../../utils/R";
 import {ElMessage, ElMessageBox} from "element-plus";
-import { useI18n } from 'vue-i18n';
+import {useI18n} from 'vue-i18n';
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const router = useRouter();
 const route = useRoute()
@@ -88,8 +88,10 @@ const upsertConfig = () => {
         description: form.value.description
       }).then(res => {
         if (res.code === 0) {
-          ElMessage.success(t('发布成功'))
-          router.back()
+          setTimeout(() => {
+            ElMessage.success(t('发布成功'))
+            router.back()
+          }, 100)
         }
       })
     })
@@ -129,7 +131,7 @@ const upsertConfig = () => {
             <el-radio-button label="txt" value="txt" disabled></el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="t('配置描述')" prop="id">
+        <el-form-item :label="t('配置描述')" prop="description">
           <el-input v-model="form.description" :placeholder="t('请填写配置描述')" maxlength="200"
                     show-word-limit></el-input>
         </el-form-item>
