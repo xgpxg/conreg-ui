@@ -3,9 +3,9 @@ import {onMounted, ref, watch} from "vue";
 import {R} from "../../utils/R";
 import {U} from "../../utils/util";
 import {ElMessageBox} from "element-plus";
-import { useI18n } from 'vue-i18n';
+import {useI18n} from 'vue-i18n';
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const namespaces = ref([])
 const page = ref({
@@ -32,6 +32,8 @@ const form = ref({
   id: null,
   name: '',
   description: '',
+  is_auth: false,
+  auth_token: '',
 })
 const formRef = ref()
 const rules = {
@@ -40,6 +42,10 @@ const rules = {
   ],
   name: [
     {required: true, message: t('请填写名称'), trigger: 'blur'},
+  ],
+  auth_token: [
+    {required: true, message: t('请填写认证Token'), trigger: 'blur'},
+    {min: 5, message: t('请填写5位以上认证Token'), trigger: 'blur'}
   ],
 }
 // 随机生成命名空间ID
@@ -52,6 +58,16 @@ const randomId = () => {
   form.value.id = result.replace(/(\w{4})/g, '$1-').slice(0, -1);
 }
 
+// 随机生成认证Token
+const generateAuthToken = () => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < 10; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  form.value.auth_token = result;
+}
+
 const upsertNamespace = () => {
   formRef.value.validate((ok) => {
     if (!ok) {
@@ -61,12 +77,16 @@ const upsertNamespace = () => {
     R.postJson('/api/namespace/upsert', {
       id: form.value.id,
       name: form.value.name,
-      description: form.value.description
+      description: form.value.description,
+      is_auth: form.value.is_auth,
+      auth_token: form.value.auth_token,
     }).then(res => {
       if (res.code === 0) {
-        loadNamespaces()
-        isShowAdd.value = false
-        isShowUpdate.value = false
+        setTimeout(() => {
+          loadNamespaces()
+          isShowAdd.value = false
+          isShowUpdate.value = false
+        }, 100)
       }
     })
   })
@@ -81,7 +101,9 @@ const del = (row: any) => {
       id: row.id
     }).then(res => {
       if (res.code === 0) {
-        loadNamespaces()
+        setTimeout(() => {
+          loadNamespaces()
+        }, 100);
       }
     })
   })
@@ -97,7 +119,7 @@ const del = (row: any) => {
             {{ t('命名空间') }}
           </h2>
           <div class="">
-            <el-button type="primary" icon="plus" @click="form={};isShowAdd=true">
+            <el-button type="primary" icon="plus" @click="form={is_auth: false};isShowAdd=true">
               {{ t('创建命名空间') }}
             </el-button>
           </div>
@@ -105,7 +127,7 @@ const del = (row: any) => {
       </template>
       <div class="mt10">
         <el-table :data="namespaces">
-          <el-table-column :label="t('ID')" width="250">
+          <el-table-column :label="t('ID')" width="200">
             <template #default="{row}">
               {{ row.id }}
             </template>
@@ -115,6 +137,23 @@ const del = (row: any) => {
           <el-table-column :label="t('描述')" prop="description" show-overflow-tooltip>
             <template #default="{row}">
               {{ row.description ? row.description : '-' }}
+            </template>
+          </el-table-column>
+          <el-table-column :label="t('认证Token')" prop="auth_token" show-overflow-tooltip>
+            <template #default="{row}">
+              <div v-if="row.is_auth">
+                {{
+                  row.auth_token ? row.auth_token.substring(0, 2) + '***' + row.auth_token.substring(row.auth_token.length - 2) : '-'
+                }}
+                <el-text type="primary" @click="U.copyText(row.auth_token)" class="cursor-pointer ml5">{{
+                    t('复制')
+                  }}
+                </el-text>
+              </div>
+              <div v-else>
+                <el-text type="info">{{ t('未启用认证') }}</el-text>
+              </div>
+
             </template>
           </el-table-column>
           <el-table-column :label="t('创建时间')" prop="create_time" width="200">
@@ -150,13 +189,25 @@ const del = (row: any) => {
           <el-input v-model="form.id" :placeholder="t('请填写命名空间ID')"></el-input>
           <el-button class="ml10" @click="randomId">{{ t('随机生成') }}</el-button>
         </div>
-        <el-text size="small" type="info" class="compact mt5">{{ t('命名空间ID用于配置/服务隔离，不能重复，创建后不可修改') }}</el-text>
+        <el-text size="small" type="info" class="compact mt5">
+          {{ t('命名空间ID用于配置/服务隔离，不能重复，创建后不可修改') }}
+        </el-text>
       </el-form-item>
       <el-form-item :label="t('名称')" prop="name">
         <el-input v-model="form.name" :placeholder="t('请填写命名空间名称')"></el-input>
       </el-form-item>
       <el-form-item :label="t('描述')" prop="description">
         <el-input v-model="form.description" :placeholder="t('请填写命名空间描述')"></el-input>
+      </el-form-item>
+      <el-form-item :label="t('开启认证')" prop="is_auth">
+        <el-switch v-model="form.is_auth"></el-switch>
+      </el-form-item>
+      <el-form-item :label="t('认证Token')" prop="auth_token" v-if="form.is_auth">
+        <div class="fill-width flex-v">
+          <el-input v-model="form.auth_token" :placeholder="t('请填写认证Token')" maxlength="64"
+                    show-word-limit></el-input>
+          <el-button class="ml10" @click="generateAuthToken">{{ t('随机生成') }}</el-button>
+        </div>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -171,13 +222,25 @@ const del = (row: any) => {
         <div class="fill-width flex-v">
           <el-input v-model="form.id" :placeholder="t('请填写命名空间ID')" disabled></el-input>
         </div>
-        <el-text size="small" type="info" class="compact mt5">{{ t('命名空间ID用于配置/服务隔离，不能重复，创建后不可修改') }}</el-text>
+        <el-text size="small" type="info" class="compact mt5">
+          {{ t('命名空间ID用于配置/服务隔离，不能重复，创建后不可修改') }}
+        </el-text>
       </el-form-item>
       <el-form-item :label="t('名称')" prop="name">
         <el-input v-model="form.name" :placeholder="t('请填写命名空间名称')"></el-input>
       </el-form-item>
       <el-form-item :label="t('描述')" prop="description">
         <el-input v-model="form.description" :placeholder="t('请填写命名空间描述')"></el-input>
+      </el-form-item>
+      <el-form-item :label="t('开启认证')" prop="is_auth">
+        <el-switch v-model="form.is_auth"></el-switch>
+      </el-form-item>
+      <el-form-item :label="t('认证Token')" prop="auth_token" v-if="form.is_auth">
+        <div class="fill-width flex-v">
+          <el-input v-model="form.auth_token" :placeholder="t('请填写认证Token')" maxlength="64"
+                    show-word-limit></el-input>
+          <el-button class="ml10" @click="generateAuthToken">{{ t('随机生成') }}</el-button>
+        </div>
       </el-form-item>
     </el-form>
     <template #footer>

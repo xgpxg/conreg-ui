@@ -173,6 +173,7 @@ export const R = {
         }
         let header = {
             Authorization: 'Bearer ' + store.state.user.token,
+            'X-Console': 'true'
             //SystemCode: 'console'
         };
         let defaultParam = {

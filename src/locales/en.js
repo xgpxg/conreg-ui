@@ -127,6 +127,10 @@ export default {
     '删除后无法恢复，请确认操作。': 'Cannot be recovered after deletion, please confirm the operation.',
     '删除命名空间': 'Delete Namespace',
     '修改命名空间': 'Update Namespace',
+    '开启认证': 'Enable Auth',
+    '认证Token': 'Auth Token',
+    '请填写认证Token': 'Please fill in auth token',
+    '未启用认证': 'Not Enabled',
 
     // Service management
     '服务列表': 'Service List',
