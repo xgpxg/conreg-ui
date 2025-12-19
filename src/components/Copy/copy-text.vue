@@ -3,34 +3,26 @@
             class="cursor-pointer"></svg-icon>
 </template>
 
-<script>
+<script setup lang="ts">
 
 
 import SvgIcon from "@components/SvgIcon/index.vue";
 import {copyText} from 'vue3-clipboard'
+import {useI18n} from 'vue-i18n'
+import {ElMessage} from "element-plus";
 
-export default {
-  name: "copy-text",
-  components: {SvgIcon},
-  props: {
-    text: String | Number
-  },
-  data() {
-    return {}
-  },
-  created() {
-    this.init()
-  },
-  methods: {
-    init() {
+const {t} = useI18n()
 
-    },
-    copy(text) {
-      copyText(text, undefined, () => {
-        this.$message.success('已复制到剪贴板')
-      })
-    }
+defineProps({
+  text: {
+    type: String,
+    default: ''
   }
+})
+const copy = (text: any) => {
+  copyText(text, undefined, () => {
+    ElMessage.success(t('已复制到剪贴板'))
+  })
 }
 </script>
 

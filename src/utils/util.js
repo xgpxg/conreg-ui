@@ -3,6 +3,7 @@ import {R} from './R'
 import axios from 'axios'
 import {copyText} from 'vue3-clipboard'
 import {ElMessage} from 'element-plus'
+import i18n from '@/locales/index.js'
 
 const IS_DEV = import.meta.env.VITE_IS_DEV
 /**
@@ -711,7 +712,7 @@ export const U = {
   },
   copyText(text) {
     copyText(text, undefined, () => {
-      ElMessage.success('已复制到剪贴板')
+      ElMessage.success(i18n.global.t('已复制到剪贴板'))
     })
   },
   checkEmail(value) {

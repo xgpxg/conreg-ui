@@ -16,6 +16,9 @@ export default {
     '发布': 'Publish',
     '返回': 'Back',
 
+    // Other
+    '已复制到剪贴板': 'Copied to clipboard',
+
     // Route menu
     '登录': 'Login',
     '配置管理': 'Configuration',
