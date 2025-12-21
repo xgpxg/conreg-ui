@@ -8,9 +8,9 @@ import {CodeEditor} from 'monaco-editor-vue3';
 import 'monaco-editor-vue3/dist/style.css';
 import {R} from "../../utils/R";
 import {ElMessage, ElMessageBox} from "element-plus";
-import { useI18n } from 'vue-i18n';
+import {useI18n} from 'vue-i18n';
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const router = useRouter();
 const route = useRoute()
@@ -40,6 +40,30 @@ const timer = setInterval(() => {
 onUnmounted(() => {
   clearInterval(timer)
 })
+
+const offline = (row) => {
+  R.postJson(`/api/discovery/instance/offline`, {
+    namespace_id: namespace.value,
+    service_id: serviceId.value,
+    instance_id: row.id
+  }).then(res => {
+    if (res.code === 0) {
+      loadInstances()
+    }
+  })
+}
+
+const online = (row) => {
+  R.postJson(`/api/discovery/instance/online`, {
+    namespace_id: namespace.value,
+    service_id: serviceId.value,
+    instance_id: row.id
+  }).then(res => {
+    if (res.code === 0) {
+      loadInstances()
+    }
+  })
+}
 
 </script>
 
@@ -92,8 +116,14 @@ onUnmounted(() => {
         <el-table-column :label="t('实例状态')">
           <template #default="{ row }">
             <el-tag v-if="row.status === 'Up'" type="success" effect="dark" disable-transitions>{{ t('正常') }}</el-tag>
-            <el-tag v-if="row.status === 'Offline'" type="info" effect="dark" disable-transitions>{{ t('已下线') }}</el-tag>
-            <el-tag v-if="row.status === 'Down'" type="info" effect="dark" disable-transitions>{{ t('已离线，即将清理') }}</el-tag>
+            <el-tag v-if="row.status === 'Offline'" type="info" effect="dark" disable-transitions>{{
+                t('已下线')
+              }}
+            </el-tag>
+            <el-tag v-if="row.status === 'Down'" type="info" effect="dark" disable-transitions>{{
+                t('已离线，即将清理')
+              }}
+            </el-tag>
             <el-tag v-else-if="row.status['Sick']" type="warning" effect="dark" disable-transitions>Sick:
               {{ row.status['Sick'] }}
             </el-tag>
@@ -106,7 +136,8 @@ onUnmounted(() => {
         </el-table-column>
         <el-table-column :label="t('操作')" width="100">
           <template #default="{ row }">
-            <el-button type="primary" @click="offline(row)">{{ t('下线') }}</el-button>
+            <el-button v-if="row.status==='Up'" type="primary" @click="offline(row)">{{ t('下线') }}</el-button>
+            <el-button v-if="row.status==='Offline'" type="primary" @click="online(row)">{{ t('上线') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
