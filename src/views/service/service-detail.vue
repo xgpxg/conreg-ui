@@ -65,15 +65,23 @@ const online = (row) => {
   })
 }
 
+const deregister = (row) => {
+  R.postJson(`/api/discovery/instance/deregister`, {
+    namespace_id: namespace.value,
+    service_id: serviceId.value,
+    instance_id: row.id
+  }).then(res => {
+    if (res.code === 0) {
+      loadInstances()
+    }
+  })
+}
 </script>
 
 <template>
   <el-card>
     <template #header>
       <div class="flex-v">
-        <el-icon size="20" class="mr10 cursor-pointer" @click="router.back()">
-          <svg-icon icon-class="back"></svg-icon>
-        </el-icon>
         <h1>{{ serviceId }}</h1>
         <div class="ml50">
           {{ t('命名空间ID') }}：
@@ -84,17 +92,20 @@ const online = (row) => {
         </div>
       </div>
     </template>
-    <div class="mt10">
+    <div class="">
       <div class="flex-space-between">
         <div>
-          <h3>{{ t('服务实例') }}</h3>
+          <el-button type="primary" @click="router.back()" icon="back">
+            {{ t('返回') }}
+          </el-button>
         </div>
         <div class="half-width flex-v">
           <el-select :placeholder="t('实例状态')" class="mr10">
             <el-option :label="t('全部')" value=""></el-option>
-            <el-option :label="t('正常')" value="up"></el-option>
-            <el-option :label="t('异常')" value="sick"></el-option>
-            <el-option :label="t('下线')" value="offline"></el-option>
+            <el-option :label="t('正常')" value="Up"></el-option>
+            <el-option :label="t('异常')" value="Sick"></el-option>
+            <el-option :label="t('下线')" value="Offline"></el-option>
+            <el-option :label="t('准备中')" value="Ready"></el-option>
           </el-select>
           <el-input :placeholder="t('IP/端口模糊搜索')" prefix-icon="search" class="mr10"></el-input>
           <el-button type="primary" @click="loadInstances">{{ t('查询') }}</el-button>
@@ -115,6 +126,7 @@ const online = (row) => {
         </el-table-column>
         <el-table-column :label="t('实例状态')">
           <template #default="{ row }">
+            <el-tag v-if="row.status === 'Ready'" type="info" disable-transitions>{{ t('准备中') }}</el-tag>
             <el-tag v-if="row.status === 'Up'" type="success" effect="dark" disable-transitions>{{ t('正常') }}</el-tag>
             <el-tag v-if="row.status === 'Offline'" type="info" effect="dark" disable-transitions>{{
                 t('已下线')
@@ -131,13 +143,20 @@ const online = (row) => {
         </el-table-column>
         <el-table-column :label="t('元数据')">
           <template #default="{ row }">
-            {{ row.meta ? row.meta : '-' }}
+            {{ row.meta && JSON.stringify(row.meta) !== '{}' ? row.meta : '-' }}
           </template>
         </el-table-column>
-        <el-table-column :label="t('操作')" width="100">
+        <el-table-column :label="t('操作')" width="160">
           <template #default="{ row }">
-            <el-button v-if="row.status==='Up'" type="primary" @click="offline(row)">{{ t('下线') }}</el-button>
-            <el-button v-if="row.status==='Offline'" type="primary" @click="online(row)">{{ t('上线') }}</el-button>
+            <el-button v-if="row.status==='Up'" type="primary" @click="offline(row)" size="small">
+              {{ t('下线') }}
+            </el-button>
+            <el-button v-if="row.status==='Offline'" type="primary" @click="online(row)" size="small">
+              {{ t('上线') }}
+            </el-button>
+            <el-button v-if="row.status==='Offline'" type="danger" @click="deregister(row)" size="small">
+              {{ t('删除') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -154,6 +154,7 @@ export default {
     '上线': 'Online',
     '正常': 'Up',
     '已下线': 'Offline',
+    '准备中': 'Ready',
     '已离线，即将清理': 'Offline, will be cleaned up',
     '端口': 'Port',
     'IP': 'IP'
